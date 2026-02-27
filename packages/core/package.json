@@ -11,11 +11,13 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "dev": "tsc -p tsconfig.json -w",
+    "test": "vitest run"
   },
   "devDependencies": {
     "typescript": "^5.5.0",
