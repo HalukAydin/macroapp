@@ -1,14 +1,10 @@
-import ProfileForm from "./components/ProfileForm";
-import Dashboard from "./components/Dashboard";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./app/routes";
 
-function App() {
+export default function App() {
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Macro MVP</h1>
-      <ProfileForm />
-      <Dashboard />
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
-
-export default App;
