@@ -11,6 +11,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <nav style={{ display: "flex", gap: 12 }}>
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/profile">Profile</Link>
+          <Link to="/log">Weight Log</Link>
         </nav>
         <div style={{ marginLeft: "auto" }}>
           <button onClick={reset}>Reset</button>
