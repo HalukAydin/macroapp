@@ -1,6 +1,13 @@
 import { create } from "zustand";
-import { calculateTdee, calculateMacroTargets, upsertWeightEntry, emaTrend } from "@macro/core";
+import {
+  calculateTdee,
+  calculateMacroTargets,
+  upsertWeightEntry,
+  emaTrend,
+  parseFoodInput
+} from "@macro/core";
 import type { ActivityLevel, Sex, WeightEntry, WeightTrendPoint } from "@macro/core";
+import type { FoodMacroBreakdown, ParsedFoodResult } from "@macro/core";
 import { loadState, saveState } from "../lib/storage";
 import type { ProfileFormValues } from "../app/profileSchema";
 
@@ -20,14 +27,24 @@ type StoredProfile = {
 type PersistedState = {
   profile: StoredProfile | null;
   weightEntries: WeightEntry[];
+  foodLog: DailyFoodLogEntry[];
+};
+
+type DailyFoodLogEntry = {
+  date: string;
+  rawInput: string;
+  totals: FoodMacroBreakdown;
 };
 
 type State = {
   profile: StoredProfile | null;
   weightEntries: WeightEntry[];
   weightTrend: WeightTrendPoint[];
+  foodLog: DailyFoodLogEntry[];
+  lastFoodEstimate: ParsedFoodResult | null;
   setProfile: (p: StoredProfile) => void;
   addWeightEntry: (entry: WeightEntry) => void;
+  estimateFood: (input: string) => ParsedFoodResult;
   reset: () => void;
 
   // derived
@@ -46,19 +63,32 @@ function computeTargetCalories(tdee: number, goal: Goal) {
 
 const initial = loadState<Partial<PersistedState>>();
 const initialWeightEntries = Array.isArray(initial?.weightEntries) ? initial.weightEntries : [];
+const initialFoodLog = Array.isArray(initial?.foodLog) ? initial.foodLog : [];
 
-function persist(profile: StoredProfile | null, weightEntries: WeightEntry[]) {
+function persist(profile: StoredProfile | null, weightEntries: WeightEntry[], foodLog: DailyFoodLogEntry[]) {
   const cleanEntries = weightEntries.map((entry) => ({
     date: entry.date,
     weightKg: entry.weightKg
   }));
-  saveState<PersistedState>({ profile, weightEntries: cleanEntries });
+  const cleanFoodLog = foodLog.map((entry) => ({
+    date: entry.date,
+    rawInput: entry.rawInput,
+    totals: {
+      proteinG: entry.totals.proteinG,
+      fatG: entry.totals.fatG,
+      carbG: entry.totals.carbG,
+      calories: entry.totals.calories
+    }
+  }));
+  saveState<PersistedState>({ profile, weightEntries: cleanEntries, foodLog: cleanFoodLog });
 }
 
 export const useProfileStore = create<State>((set, get) => ({
   profile: initial?.profile ?? null,
   weightEntries: initialWeightEntries,
   weightTrend: emaTrend(initialWeightEntries),
+  foodLog: initialFoodLog,
+  lastFoodEstimate: null,
 
   tdee: null,
   targetCalories: null,
@@ -76,7 +106,7 @@ export const useProfileStore = create<State>((set, get) => ({
       fatMinGPerKg: p.fatMinGPerKg
     };
     set({ profile: clean });
-    persist(clean, get().weightEntries);
+    persist(clean, get().weightEntries, get().foodLog);
     get().recalc();
   },
 
@@ -90,7 +120,30 @@ export const useProfileStore = create<State>((set, get) => ({
       weightEntries: updatedEntries,
       weightTrend: emaTrend(updatedEntries)
     });
-    persist(get().profile, updatedEntries);
+    persist(get().profile, updatedEntries, get().foodLog);
+  },
+
+  estimateFood: (input) => {
+    const result = parseFoodInput(input);
+    const trimmedInput = input.trim();
+    let nextLog = get().foodLog;
+
+    if (trimmedInput && result.items.length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      const nextEntry: DailyFoodLogEntry = {
+        date: today,
+        rawInput: trimmedInput,
+        totals: result.totals
+      };
+      nextLog = [...nextLog, nextEntry];
+    }
+
+    set({
+      lastFoodEstimate: result,
+      foodLog: nextLog
+    });
+    persist(get().profile, get().weightEntries, nextLog);
+    return result;
   },
 
   reset: () => {
@@ -98,11 +151,13 @@ export const useProfileStore = create<State>((set, get) => ({
       profile: null,
       weightEntries: [],
       weightTrend: [],
+      foodLog: [],
+      lastFoodEstimate: null,
       tdee: null,
       targetCalories: null,
       macros: null
     });
-    persist(null, []);
+    persist(null, [], []);
   },
 
   recalc: () => {
