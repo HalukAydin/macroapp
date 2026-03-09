@@ -1,0 +1,215 @@
+{
+  "app": {
+    "brand": "Macro MVP",
+    "navAria": "Primary navigation",
+    "nav": {
+      "dashboard": "Dashboard",
+      "profile": "Profile",
+      "weightLog": "Weight Log"
+    },
+    "language": "Language",
+    "languages": {
+      "en": "English",
+      "tr": "Turkish"
+    },
+    "reset": "Reset",
+    "resetFeedback": {
+      "resetDone": "Profile and logs were reset.",
+      "nothing": "Nothing to reset."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Daily targets and recent nutrition activity.",
+    "empty": {
+      "noProfileTitle": "No profile yet",
+      "line1": "You have not set your age, weight, activity level, and macro rules yet.",
+      "line2": "Once saved, this page will show your daily targets and progress summaries.",
+      "goToProfile": "Go to Profile setup",
+      "subtitle": "Build your profile first to unlock calorie targets, macro planning, and trend tracking."
+    },
+    "summary": {
+      "tdeeTitle": "TDEE",
+      "targetCaloriesTitle": "Target Calories",
+      "macroSummaryTitle": "Macro Summary",
+      "weightTrendTitle": "Weight Trend Status",
+      "todaySummaryTitle": "Today Summary",
+      "kcalPerDay": "kcal/day",
+      "oneEntry": "One weigh-in saved. Add one more entry to see trend direction.",
+      "noWeighIns": "No weigh-ins yet.",
+      "addFirstEntry": "Add your first entry",
+      "trendVsFirst": "{{delta}} kg vs first entry"
+    },
+    "modes": {
+      "cut": "fat loss",
+      "bulk": "muscle gain",
+      "maintain": "weight maintenance"
+    },
+    "today": {
+      "modeSentence": "You are currently in {{mode}} mode with a target of {{calories}} kcal/day.",
+      "macroSentence": "Macro plan: P {{protein}}g, F {{fat}}g, C {{carb}}g."
+    },
+    "progress": {
+      "title": "Daily Progress",
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fat": "Fat",
+      "percent": "{{percent}}% of target"
+    },
+    "quickAdd": {
+      "title": "Quick Add (Food Estimate)",
+      "mealInputLabel": "Meal input",
+      "placeholder": "2 eggs, 80g oats, 150g chicken",
+      "helper": "Use comma-separated items. Format: quantity + unit + food (e.g. 150g chicken or 2 eggs). Local parser runs first, then external suggestions are shown when needed.",
+      "button": "Estimate",
+      "buttonLoading": "Searching...",
+      "addToToday": "Add to Today",
+      "estimatedMealName": "Estimated Meal ({{count}} items)",
+      "feedback": {
+        "enterFood": "Enter food items first. Example: 2 eggs, 80g oats, 150g chicken",
+        "parseFailed": "Could not parse input. Try the example format below.",
+        "estimateReady": "Estimate is ready. Review it, then add to today's log.",
+        "estimateWithWarnings": "Estimate is ready with {{count}} warning(s). You can still add it to today.",
+        "noEstimateToAdd": "Estimate first, then use Add to Today.",
+        "addedToToday": "Estimated meal was added to today's log.",
+        "savedWithWarnings": "Estimate saved with {{count}} warning(s). Review parsing details below.",
+        "savedSuccess": "Estimate calculated and added to your daily log.",
+        "externalSuggestionsReady": "{{count}} external suggestion(s) found. Select the correct food below.",
+        "apiFailed": "External food lookup failed. You can retry or refine the input.",
+        "invalidSelectedAmount": "Enter a valid gram amount for the selected food.",
+        "externalAdded": "Selected external food was added to your daily log."
+      },
+      "noEstimate": "No estimate yet. Try: 2 eggs, 80g oats, 150g chicken",
+      "issueUnparsed": "\"{{segment}}\" could not be parsed.",
+      "labels": {
+        "protein": "Protein",
+        "fat": "Fat",
+        "carb": "Carb",
+        "calories": "Calories"
+      },
+      "external": {
+        "partialLocalMatch": "Partial local match was logged. You can complete missing foods from suggestions below.",
+        "loading": "Searching external foods for \"{{query}}\"...",
+        "noResults": "No external food results found for \"{{query}}\".",
+        "noResultsHint": "Try a simpler food name, add quantity/unit (e.g. 100g), or use English/Turkish aliases.",
+        "apiFailure": "Could not reach external food service right now.",
+        "resultsTitle": "External Suggestions",
+        "selectPrompt": "Select the closest food, preview macros, then add to daily log.",
+        "per100": "Per 100g: P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal",
+        "previewTitle": "Selected: {{food}}",
+        "amountLabel": "Amount (g)",
+        "invalidAmount": "Amount must be greater than 0 g.",
+        "addSelected": "Add Selected Food"
+      }
+    },
+    "dailyLog": {
+      "title": "Daily Log",
+      "emptyLine1": "No items logged yet. Your estimates will appear here after Quick Add.",
+      "emptyLine2": "Start with: 2 eggs, 80g oats, 150g chicken",
+      "totalsLine": "Today's totals: P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal",
+      "remove": "Remove",
+      "clearToday": "Clear Today",
+      "entryTotals": "P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Set your baseline and macro rules.",
+    "fields": {
+      "sex": {
+        "label": "Sex",
+        "options": {
+          "male": "male",
+          "female": "female"
+        },
+        "error": "Select your sex."
+      },
+      "age": {
+        "label": "Age",
+        "placeholder": "e.g. 28",
+        "hint": "Range: 13-90 years.",
+        "error": "Enter a valid age between 13 and 90."
+      },
+      "heightCm": {
+        "label": "Height (cm)",
+        "placeholder": "e.g. 175",
+        "hint": "Range: 120-230 cm.",
+        "error": "Enter a valid height between 120 and 230 cm."
+      },
+      "weightKg": {
+        "label": "Weight (kg)",
+        "placeholder": "e.g. 78.0",
+        "hint": "Range: 35-250 kg.",
+        "error": "Enter a valid weight between 35 and 250 kg."
+      },
+      "activity": {
+        "label": "Activity",
+        "options": {
+          "sedentary": "sedentary",
+          "light": "light",
+          "moderate": "moderate",
+          "active": "active",
+          "very_active": "very active"
+        },
+        "error": "Select an activity level."
+      },
+      "goal": {
+        "label": "Goal",
+        "options": {
+          "cut": "cut",
+          "maintain": "maintain",
+          "bulk": "bulk"
+        },
+        "error": "Select a goal."
+      },
+      "proteinGPerKg": {
+        "label": "Protein (g/kg)",
+        "placeholder": "e.g. 2.0",
+        "hint": "Range: 1.2-3.0 g/kg.",
+        "error": "Enter protein between 1.2 and 3.0 g/kg."
+      },
+      "fatMinGPerKg": {
+        "label": "Fat min (g/kg)",
+        "placeholder": "e.g. 0.8",
+        "hint": "Range: 0.3-1.5 g/kg.",
+        "error": "Enter fat minimum between 0.3 and 1.5 g/kg."
+      }
+    },
+    "errors": {
+      "fixBeforeSave": "Please fix highlighted fields before saving."
+    },
+    "saveButton": "Save",
+    "saveSuccess": "Profile saved. Dashboard targets are updated."
+  },
+  "weightLog": {
+    "title": "Weight Log",
+    "subtitle": "Track daily scale changes and EMA trend.",
+    "addEntryTitle": "Add Weight Entry",
+    "fields": {
+      "date": "Date",
+      "weight": "Weight (kg)",
+      "weightPlaceholder": "e.g. 78.4",
+      "weightHint": "Suggested daily weigh-in range: 20 to 350 kg."
+    },
+    "buttons": {
+      "saveEntry": "Save Entry"
+    },
+    "feedback": {
+      "invalid": "Enter a valid date and weight between 20 and 350 kg.",
+      "saved": "Saved {{weight}} kg for {{date}}."
+    },
+    "latestTitle": "Latest Weight",
+    "latestEmpty1": "No weight entries yet.",
+    "latestEmpty2": "Add your first morning weigh-in to start the trend.",
+    "trendTitle": "Trend Chart",
+    "trendEmptyNoEntries": "No entries yet. Add your first data point to begin tracking.",
+    "trendEmptyNeedMore": "One entry saved. Add one more entry on a different day to see a meaningful trend.",
+    "chart": {
+      "weightLine": "Weight (kg)",
+      "emaLine": "EMA Trend (kg)"
+    },
+    "entriesTitle": "Entries",
+    "entriesEmpty": "No weight entries yet. Saved entries will appear here."
+  }
+}

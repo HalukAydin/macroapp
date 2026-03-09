@@ -41,7 +41,20 @@ function buildAliasMap(): Map<string, FoodCatalogItem> {
 }
 
 function normalize(value: string): string {
-  return value.trim().toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
+  const lowered = value.trim().toLocaleLowerCase("tr-TR");
+  const asciiFriendly = lowered
+    .replace(/ç/g, "c")
+    .replace(/ğ/g, "g")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ş/g, "s")
+    .replace(/ü/g, "u");
+
+  return asciiFriendly
+    .replace(/['’`´"]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function round1(value: number): number {
@@ -68,12 +81,23 @@ function addMacros(a: FoodMacroBreakdown, b: FoodMacroBreakdown): FoodMacroBreak
   };
 }
 
-function parseSegment(segment: string): { quantity: number; unitRaw: string; foodRaw: string } | null {
+function parseSegment(
+  segment: string
+): { quantity: number; unitRaw: string; foodRaw: string; assumedQuantity: boolean } | null {
   const trimmed = segment.trim();
   if (!trimmed) return null;
 
   const match = trimmed.match(/^(\d+(?:[.,]\d+)?)(.*)$/);
-  if (!match) return null;
+  if (!match) {
+    const foodRaw = normalize(trimmed);
+    if (!foodRaw) return null;
+    return {
+      quantity: 100,
+      unitRaw: "g",
+      foodRaw,
+      assumedQuantity: true
+    };
+  }
 
   const quantity = Number(match[1].replace(",", "."));
   const remainder = (match[2] ?? "").trim();
@@ -91,7 +115,7 @@ function parseSegment(segment: string): { quantity: number; unitRaw: string; foo
 
   if (!Number.isFinite(quantity) || quantity <= 0 || !foodRaw) return null;
 
-  return { quantity, unitRaw, foodRaw };
+  return { quantity, unitRaw, foodRaw, assumedQuantity: false };
 }
 
 function resolveUnit(item: FoodCatalogItem, unitRaw: string): ParsedUnit | null {
@@ -158,6 +182,13 @@ export function parseFoodInput(input: string): ParsedFoodResult {
       grams: round1(grams),
       macros
     });
+
+    if (parsed.assumedQuantity) {
+      issues.push({
+        segment: rawSegment,
+        reason: "Missing quantity. Assumed 100 g."
+      });
+    }
   }
 
   const totals = items.reduce<FoodMacroBreakdown>(

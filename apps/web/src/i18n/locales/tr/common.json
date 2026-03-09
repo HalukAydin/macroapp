@@ -1,0 +1,215 @@
+{
+  "app": {
+    "brand": "Macro MVP",
+    "navAria": "Ana gezinme",
+    "nav": {
+      "dashboard": "Panel",
+      "profile": "Profil",
+      "weightLog": "Kilo Günlüğü"
+    },
+    "language": "Dil",
+    "languages": {
+      "en": "İngilizce",
+      "tr": "Türkçe"
+    },
+    "reset": "Sıfırla",
+    "resetFeedback": {
+      "resetDone": "Profil ve kayıtlar sıfırlandı.",
+      "nothing": "Sıfırlanacak veri yok."
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "subtitle": "Günlük hedefler ve son beslenme etkinliği.",
+    "empty": {
+      "noProfileTitle": "Henüz profil yok",
+      "line1": "Yaş, kilo, aktivite düzeyi ve makro kurallarını henüz ayarlamadın.",
+      "line2": "Kaydettikten sonra bu sayfada günlük hedeflerini ve ilerleme özetlerini göreceksin.",
+      "goToProfile": "Profil kurulumuna git",
+      "subtitle": "Kalori hedefi, makro planı ve trend takibi için önce profilini oluştur."
+    },
+    "summary": {
+      "tdeeTitle": "TDEE",
+      "targetCaloriesTitle": "Hedef Kalori",
+      "macroSummaryTitle": "Makro Özeti",
+      "weightTrendTitle": "Kilo Trend Durumu",
+      "todaySummaryTitle": "Bugün Özeti",
+      "kcalPerDay": "kcal/gün",
+      "oneEntry": "Bir tartım kaydı var. Trend yönünü görmek için bir kayıt daha ekle.",
+      "noWeighIns": "Henüz tartım kaydı yok.",
+      "addFirstEntry": "İlk kaydını ekle",
+      "trendVsFirst": "İlk kayda göre {{delta}} kg"
+    },
+    "modes": {
+      "cut": "yağ kaybı",
+      "bulk": "kas kazanımı",
+      "maintain": "kilo koruma"
+    },
+    "today": {
+      "modeSentence": "Şu an {{mode}} modundasın ve hedefin günlük {{calories}} kcal.",
+      "macroSentence": "Makro planı: P {{protein}}g, F {{fat}}g, C {{carb}}g."
+    },
+    "progress": {
+      "title": "Günlük İlerleme",
+      "calories": "Kalori",
+      "protein": "Protein",
+      "carbs": "Karbonhidrat",
+      "fat": "Yağ",
+      "percent": "Hedefin %{{percent}} kadarı"
+    },
+    "quickAdd": {
+      "title": "Hızlı Ekle (Tahmin)",
+      "mealInputLabel": "Öğün girişi",
+      "placeholder": "2 yumurta, 80g yulaf, 150g tavuk",
+      "helper": "Öğeleri virgülle ayır. Format: miktar + birim + besin (örn. 150g tavuk veya 2 yumurta). Önce yerel ayrıştırıcı çalışır, gerekirse dış kaynak önerileri gösterilir.",
+      "button": "Tahmin Et",
+      "buttonLoading": "Aranıyor...",
+      "addToToday": "Bugüne Ekle",
+      "estimatedMealName": "Tahmini Öğün ({{count}} öğe)",
+      "feedback": {
+        "enterFood": "Önce besin gir. Örnek: 2 yumurta, 80g yulaf, 150g tavuk",
+        "parseFailed": "Girdi çözümlenemedi. Aşağıdaki örnek formatı dene.",
+        "estimateReady": "Tahmin hazır. Kontrol edip bugünkü kayda ekleyebilirsin.",
+        "estimateWithWarnings": "Tahmin {{count}} uyarı ile hazırlandı. Yine de bugüne ekleyebilirsin.",
+        "noEstimateToAdd": "Önce tahmin yap, sonra Bugüne Ekle'yi kullan.",
+        "addedToToday": "Tahmini öğün bugünkü kayda eklendi.",
+        "savedWithWarnings": "Tahmin {{count}} uyarı ile kaydedildi. Detayları aşağıda incele.",
+        "savedSuccess": "Tahmin hesaplandı ve günlük kayda eklendi.",
+        "externalSuggestionsReady": "{{count}} dış kaynak önerisi bulundu. Aşağıdan doğru besini seç.",
+        "apiFailed": "Harici besin araması başarısız oldu. Yeniden deneyebilir veya girdiyi sadeleştirebilirsin.",
+        "invalidSelectedAmount": "Seçilen besin için geçerli bir gram miktarı gir.",
+        "externalAdded": "Seçilen harici besin günlük kayda eklendi."
+      },
+      "noEstimate": "Henüz tahmin yok. Dene: 2 yumurta, 80g yulaf, 150g tavuk",
+      "issueUnparsed": "\"{{segment}}\" çözümlenemedi.",
+      "labels": {
+        "protein": "Protein",
+        "fat": "Yağ",
+        "carb": "Karbonhidrat",
+        "calories": "Kalori"
+      },
+      "external": {
+        "partialLocalMatch": "Kısmi yerel eşleşme kaydedildi. Eksik besinleri aşağıdaki önerilerden tamamlayabilirsin.",
+        "loading": "\"{{query}}\" için dış kaynakta besin aranıyor...",
+        "noResults": "\"{{query}}\" için dış kaynakta sonuç bulunamadı.",
+        "noResultsHint": "Daha sade bir besin adı dene, miktar/birim ekle (örn. 100g) veya İngilizce/Türkçe alternatif ad kullan.",
+        "apiFailure": "Harici besin servisine şu anda ulaşılamıyor.",
+        "resultsTitle": "Dış Kaynak Önerileri",
+        "selectPrompt": "En yakın besini seç, makro önizlemeyi kontrol et ve günlük kayda ekle.",
+        "per100": "100g için: P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal",
+        "previewTitle": "Seçilen: {{food}}",
+        "amountLabel": "Miktar (g)",
+        "invalidAmount": "Miktar 0 g'dan büyük olmalı.",
+        "addSelected": "Seçilen Besini Ekle"
+      }
+    },
+    "dailyLog": {
+      "title": "Günlük Kayıt",
+      "emptyLine1": "Henüz öğe kaydı yok. Hızlı Ekle sonrası tahminler burada görünür.",
+      "emptyLine2": "Şununla başla: 2 yumurta, 80g yulaf, 150g tavuk",
+      "totalsLine": "Bugün toplam: P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal",
+      "remove": "Sil",
+      "clearToday": "Bugünü Temizle",
+      "entryTotals": "P {{protein}}g / F {{fat}}g / C {{carb}}g / {{calories}} kcal"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "subtitle": "Temel bilgilerini ve makro kurallarını ayarla.",
+    "fields": {
+      "sex": {
+        "label": "Cinsiyet",
+        "options": {
+          "male": "erkek",
+          "female": "kadın"
+        },
+        "error": "Cinsiyet seç."
+      },
+      "age": {
+        "label": "Yaş",
+        "placeholder": "örn. 28",
+        "hint": "Aralık: 13-90 yaş.",
+        "error": "13 ile 90 arasında geçerli bir yaş gir."
+      },
+      "heightCm": {
+        "label": "Boy (cm)",
+        "placeholder": "örn. 175",
+        "hint": "Aralık: 120-230 cm.",
+        "error": "120 ile 230 cm arasında geçerli bir boy gir."
+      },
+      "weightKg": {
+        "label": "Kilo (kg)",
+        "placeholder": "örn. 78.0",
+        "hint": "Aralık: 35-250 kg.",
+        "error": "35 ile 250 kg arasında geçerli bir kilo gir."
+      },
+      "activity": {
+        "label": "Aktivite",
+        "options": {
+          "sedentary": "hareketsiz",
+          "light": "hafif",
+          "moderate": "orta",
+          "active": "aktif",
+          "very_active": "çok aktif"
+        },
+        "error": "Aktivite düzeyi seç."
+      },
+      "goal": {
+        "label": "Hedef",
+        "options": {
+          "cut": "definasyon",
+          "maintain": "koruma",
+          "bulk": "hacim"
+        },
+        "error": "Hedef seç."
+      },
+      "proteinGPerKg": {
+        "label": "Protein (g/kg)",
+        "placeholder": "örn. 2.0",
+        "hint": "Aralık: 1.2-3.0 g/kg.",
+        "error": "Protein için 1.2 ile 3.0 g/kg arasında değer gir."
+      },
+      "fatMinGPerKg": {
+        "label": "Minimum yağ (g/kg)",
+        "placeholder": "örn. 0.8",
+        "hint": "Aralık: 0.3-1.5 g/kg.",
+        "error": "Minimum yağ için 0.3 ile 1.5 g/kg arasında değer gir."
+      }
+    },
+    "errors": {
+      "fixBeforeSave": "Kaydetmeden önce işaretli alanları düzelt."
+    },
+    "saveButton": "Kaydet",
+    "saveSuccess": "Profil kaydedildi. Panel hedefleri güncellendi."
+  },
+  "weightLog": {
+    "title": "Kilo Günlüğü",
+    "subtitle": "Günlük tartım değişimini ve EMA trendini takip et.",
+    "addEntryTitle": "Kilo Kaydı Ekle",
+    "fields": {
+      "date": "Tarih",
+      "weight": "Kilo (kg)",
+      "weightPlaceholder": "örn. 78.4",
+      "weightHint": "Önerilen günlük tartım aralığı: 20-350 kg."
+    },
+    "buttons": {
+      "saveEntry": "Kaydı Kaydet"
+    },
+    "feedback": {
+      "invalid": "20 ile 350 kg arasında geçerli bir kilo ve tarih gir.",
+      "saved": "{{date}} için {{weight}} kg kaydedildi."
+    },
+    "latestTitle": "Son Kilo",
+    "latestEmpty1": "Henüz kilo kaydı yok.",
+    "latestEmpty2": "Trendi başlatmak için ilk sabah tartımını ekle.",
+    "trendTitle": "Trend Grafiği",
+    "trendEmptyNoEntries": "Henüz kayıt yok. Takibi başlatmak için ilk veri noktasını ekle.",
+    "trendEmptyNeedMore": "Bir kayıt var. Anlamlı trend için farklı bir günde bir kayıt daha ekle.",
+    "chart": {
+      "weightLine": "Kilo (kg)",
+      "emaLine": "EMA Trend (kg)"
+    },
+    "entriesTitle": "Kayıtlar",
+    "entriesEmpty": "Henüz kilo kaydı yok. Kaydedilen girişler burada görünür."
+  }
+}
