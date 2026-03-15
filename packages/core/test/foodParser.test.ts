@@ -74,7 +74,8 @@ describe("food parser", () => {
         { input: "1 egg", foodId: "egg", grams: 50 },
         { input: "100g yogurt", foodId: "yogurt", grams: 100 },
         { input: "100g oats", foodId: "oats", grams: 100 },
-        { input: "100g chicken", foodId: "chicken_breast", grams: 100 }
+        { input: "100g chicken", foodId: "chicken_breast", grams: 100 },
+        { input: "30g whey protein", foodId: "whey_protein", grams: 30 }
       ];
 
       for (const testCase of cases) {
@@ -115,6 +116,66 @@ describe("food parser", () => {
     });
   });
 
+  describe("ml and scoop-based parsing", () => {
+    it("parses whey in grams", () => {
+      const result = parseFoodInput("30g whey protein");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("whey_protein");
+      expect(result.items[0]?.unit).toBe("g");
+      expect(result.items[0]?.grams).toBe(30);
+      expect(result.items[0]?.macros).toEqual({
+        proteinG: 24,
+        fatG: 1.8,
+        carbG: 2.4,
+        calories: 120
+      });
+    });
+
+    it("parses whey in scoop units", () => {
+      const result = parseFoodInput("1 scoop whey");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("whey_protein");
+      expect(result.items[0]?.unit).toBe("scoop");
+      expect(result.items[0]?.grams).toBe(30);
+      expect(result.items[0]?.macros).toEqual({
+        proteinG: 24,
+        fatG: 1.8,
+        carbG: 2.4,
+        calories: 120
+      });
+    });
+
+    it("parses whey in Turkish scoop units", () => {
+      const result = parseFoodInput("1 ölçek whey");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("whey_protein");
+      expect(result.items[0]?.unit).toBe("scoop");
+      expect(result.items[0]?.grams).toBe(30);
+    });
+
+    it("parses milk in ml", () => {
+      const result = parseFoodInput("200ml süt");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("milk");
+      expect(result.items[0]?.unit).toBe("ml");
+      expect(result.items[0]?.grams).toBe(200);
+      expect(result.items[0]?.macros).toEqual({
+        proteinG: 6.6,
+        fatG: 6.8,
+        carbG: 9.6,
+        calories: 122
+      });
+    });
+  });
+
   describe("multi-item parsing and aggregation", () => {
     it("parses mixed Turkish multi-item input", () => {
       const result = parseFoodInput("2 yumurta, 80g yulaf, 150g tavuk");
@@ -146,6 +207,19 @@ describe("food parser", () => {
       const result = parseFoodInput("100g pilav, 150g kıyma, 100g yoğurt");
       expect(result.issues).toHaveLength(0);
       expect(result.totals).toEqual(sumItemMacros(result));
+    });
+
+    it("parses fitness-focused mixed input with whey", () => {
+      const result = parseFoodInput("2 yumurta, 80g yulaf, 30g whey");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(3);
+      expect(result.totals).toEqual({
+        proteinG: 50.5,
+        fatG: 18.3,
+        carbG: 56.5,
+        calories: 586.2
+      });
     });
   });
 

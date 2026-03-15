@@ -8,10 +8,13 @@ export interface FoodMacroBreakdown {
 export interface FoodCatalogItem {
   id:
     | "egg"
+    | "whey_protein"
     | "oats"
+    | "peanut_butter"
     | "chicken_breast"
     | "cooked_rice"
     | "yogurt"
+    | "greek_yogurt"
     | "banana"
     | "bread"
     | "cheese"
@@ -31,6 +34,8 @@ export interface FoodCatalogItem {
   aliases: string[];
   per100g: FoodMacroBreakdown;
   pieceToGram?: number;
+  mlToGram?: number;
+  scoopToGram?: number;
 }
 
 export const FOOD_CATALOG: FoodCatalogItem[] = [
@@ -45,6 +50,25 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       calories: 155
     },
     pieceToGram: 50
+  },
+  {
+    id: "whey_protein",
+    displayName: "Whey Protein",
+    aliases: [
+      "whey",
+      "whey protein",
+      "protein powder",
+      "protein tozu",
+      "whey powder",
+      "whey isolate"
+    ],
+    per100g: {
+      proteinG: 80,
+      fatG: 6,
+      carbG: 8,
+      calories: 400
+    },
+    scoopToGram: 30
   },
   {
     id: "oats",
@@ -63,6 +87,17 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       fatG: 6.9,
       carbG: 66.3,
       calories: 389
+    }
+  },
+  {
+    id: "peanut_butter",
+    displayName: "Peanut Butter",
+    aliases: ["peanut butter", "fistik ezmesi", "fıstık ezmesi"],
+    per100g: {
+      proteinG: 25,
+      fatG: 50,
+      carbG: 20,
+      calories: 588
     }
   },
   {
@@ -105,7 +140,20 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       fatG: 3.3,
       carbG: 4.7,
       calories: 61
-    }
+    },
+    mlToGram: 1
+  },
+  {
+    id: "greek_yogurt",
+    displayName: "Greek Yogurt",
+    aliases: ["greek yogurt", "greek yoghurt", "suzme yogurt", "süzme yoğurt"],
+    per100g: {
+      proteinG: 10,
+      fatG: 5,
+      carbG: 3.6,
+      calories: 97
+    },
+    mlToGram: 1
   },
   {
     id: "banana",
@@ -150,7 +198,8 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       fatG: 3.4,
       carbG: 4.8,
       calories: 61
-    }
+    },
+    mlToGram: 1
   },
   {
     id: "beef",
