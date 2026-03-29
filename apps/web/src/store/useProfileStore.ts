@@ -74,6 +74,7 @@ type PersistedState = {
 
 type State = {
   profile: StoredProfile | null;
+  isHydrated: boolean;
   weightEntries: WeightEntry[];
   weightTrend: WeightTrendPoint[];
   dailyLog: DailyLog;
@@ -270,6 +271,7 @@ function persist(profile: StoredProfile | null, weightEntries: WeightEntry[], da
 
 export const useProfileStore = create<State>((set, get) => ({
   profile: initial?.profile ?? null,
+  isHydrated: false,
   weightEntries: initialWeightEntries,
   weightTrend: emaTrend(initialWeightEntries),
   dailyLog: initialDailyLog,
@@ -398,7 +400,10 @@ export const useProfileStore = create<State>((set, get) => ({
   },
 
   hydrateFromApi: async () => {
-    if (!useAuthStore.getState().isAuthenticated) return;
+    if (!useAuthStore.getState().isAuthenticated) {
+      set({ isHydrated: true });
+      return;
+    }
     const today = todayIsoDate();
     const [profileRes, weightRes, foodRes] = await Promise.allSettled([
       api.getProfile(),
@@ -450,6 +455,7 @@ export const useProfileStore = create<State>((set, get) => ({
 
     const s = get();
     persist(s.profile, s.weightEntries, s.dailyLog);
+    set({ isHydrated: true });
   },
 
   clearTodayLog: () => {

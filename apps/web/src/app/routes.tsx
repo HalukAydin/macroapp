@@ -8,7 +8,9 @@ import WeightLogPage from "../pages/WeightLogPage";
 import LoginPage from "../pages/LoginPage";
 
 function HomeRedirect() {
+  const isHydrated = useProfileStore((s) => s.isHydrated);
   const profile = useProfileStore((s) => s.profile);
+  if (!isHydrated) return null;
   return <Navigate to={profile ? "/dashboard" : "/profile"} replace />;
 }
 
