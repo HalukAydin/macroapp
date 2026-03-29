@@ -12,6 +12,7 @@
       "en": "İngilizce",
       "tr": "Türkçe"
     },
+    "logout": "Çıkış",
     "reset": "Sıfırla",
     "resetFeedback": {
       "resetDone": "Profil ve kayıtlar sıfırlandı.",
@@ -61,7 +62,7 @@
       "title": "Hızlı Ekle (Tahmin)",
       "mealInputLabel": "Öğün girişi",
       "placeholder": "2 yumurta, 80g yulaf, 150g tavuk",
-      "helper": "Öğeleri virgülle ayır. Format: miktar + birim + besin (örn. 150g tavuk veya 2 yumurta). Önce yerel ayrıştırıcı çalışır, gerekirse dış kaynak önerileri gösterilir.",
+      "helper": "Virgülle ayırarak birden fazla besin girebilirsin. Örn: 2 yumurta, 80g yulaf, 150g tavuk",
       "button": "Tahmin Et",
       "buttonLoading": "Aranıyor...",
       "addToToday": "Bugüne Ekle",

@@ -39,9 +39,14 @@ export default function LoginPage() {
 
   return (
     <PageContainer>
-      <div style={{ maxWidth: 400, margin: "80px auto" }}>
-        <div className="page-stack">
-          <h1 className="section-title">
+      <div style={{ maxWidth: 400, margin: "120px auto" }}>
+        <div className="ui-card page-stack">
+          <div style={{ textAlign: "center", marginBottom: "24px" }}>
+            <span style={{ fontSize: "1.5rem", fontWeight: 700 }}>MacroTrack</span>
+            <p style={{ textAlign: "center", color: "var(--muted)", marginTop: "6px", fontSize: "0.9rem" }}>Track your macros. Reach your goals.</p>
+          </div>
+
+          <h1 className="section-title" style={{ fontSize: "1.2rem", textAlign: "center" }}>
             {mode === "login" ? "Sign In" : "Create Account"}
           </h1>
 
@@ -77,7 +82,7 @@ export default function LoginPage() {
               </p>
             ) : null}
 
-            <button type="submit" disabled={loading}>
+            <button type="submit" disabled={loading} style={{ width: "100%" }}>
               {loading ? "…" : mode === "login" ? "Sign In" : "Create Account"}
             </button>
 
@@ -91,5 +96,6 @@ export default function LoginPage() {
         </div>
       </div>
     </PageContainer>
+
   );
 }

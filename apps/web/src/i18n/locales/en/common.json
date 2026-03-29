@@ -12,6 +12,7 @@
       "en": "English",
       "tr": "Turkish"
     },
+    "logout": "Log out",
     "reset": "Reset",
     "resetFeedback": {
       "resetDone": "Profile and logs were reset.",
@@ -61,7 +62,7 @@
       "title": "Quick Add (Food Estimate)",
       "mealInputLabel": "Meal input",
       "placeholder": "2 eggs, 80g oats, 150g chicken",
-      "helper": "Use comma-separated items. Format: quantity + unit + food (e.g. 150g chicken or 2 eggs). Local parser runs first, then external suggestions are shown when needed.",
+      "helper": "Enter multiple foods separated by commas. E.g: 2 eggs, 80g oats, 150g chicken",
       "button": "Estimate",
       "buttonLoading": "Searching...",
       "addToToday": "Add to Today",

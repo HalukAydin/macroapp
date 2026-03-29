@@ -8,15 +8,15 @@
   -moz-osx-font-smoothing: grayscale;
 
   color-scheme: dark;
-  --bg: #0b1220;
-  --bg-soft: #131e30;
-  --surface: #152238;
-  --surface-hover: #1a2b45;
-  --border: #2a3a55;
+  --bg: #080f1a;
+  --bg-soft: #0e1622;
+  --surface: #111c2d;
+  --surface-hover: #162236;
+  --border: #1e2d45;
   --text: #e7edf7;
   --muted: #95a7bf;
-  --accent: #38bdf8;
-  --accent-strong: #0ea5e9;
+  --accent: #6366f1;
+  --accent-strong: #4f46e5;
   --warn: #fbbf24;
 
   --space-1: 4px;
@@ -94,13 +94,13 @@ button {
   font-size: 0.95rem;
   font-weight: 600;
   background: var(--accent);
-  color: #04243a;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.15s ease;
 }
 
 button:hover {
-  background: #67cffb;
+  background: #4f46e5;
 }
 
 button:active {
@@ -218,9 +218,9 @@ textarea {
 }
 
 .app-nav-link.is-active {
-  color: #d7f3ff;
-  border-color: #23698a;
-  background: rgba(56, 189, 248, 0.12);
+  color: #e0e7ff;
+  border-color: #4338ca;
+  background: rgba(99, 102, 241, 0.15);
 }
 
 .app-reset-btn {
@@ -320,7 +320,7 @@ textarea {
 .progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #22d3ee 0%, #38bdf8 100%);
+  background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
   transition: width 0.2s ease;
 }
 
