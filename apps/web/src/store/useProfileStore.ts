@@ -11,7 +11,6 @@ import type { FoodMacroBreakdown, ParsedFoodResult } from "@macro/core";
 import { loadState, saveState } from "../lib/storage";
 import type { ProfileFormValues } from "../app/profileSchema";
 import * as api from "../lib/api";
-import { TOKEN_KEY } from "../lib/api";
 import { useAuthStore } from "./useAuthStore";
 
 type Goal = "cut" | "maintain" | "bulk";
