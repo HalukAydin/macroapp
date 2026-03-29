@@ -117,6 +117,11 @@
   "profile": {
     "title": "Profil",
     "subtitle": "Temel bilgilerini ve makro kurallarını ayarla.",
+    "onboardingSubtitle": "Makrolarını hesaplamak için temel bilgilerini gir.",
+    "sections": {
+      "basic": "Temel Bilgiler",
+      "goalActivity": "Hedef ve Aktivite"
+    },
     "fields": {
       "sex": {
         "label": "Cinsiyet",
@@ -171,7 +176,7 @@
         "error": "Protein için 1.2 ile 3.0 g/kg arasında değer gir."
       },
       "fatMinGPerKg": {
-        "label": "Minimum yağ (g/kg)",
+        "label": "Minimum Yağ (g/kg)",
         "placeholder": "örn. 0.8",
         "hint": "Aralık: 0.3-1.5 g/kg.",
         "error": "Minimum yağ için 0.3 ile 1.5 g/kg arasında değer gir."

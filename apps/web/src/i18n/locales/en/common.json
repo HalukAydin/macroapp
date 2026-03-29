@@ -117,6 +117,11 @@
   "profile": {
     "title": "Profile",
     "subtitle": "Set your baseline and macro rules.",
+    "onboardingSubtitle": "Enter your details to calculate your daily macros.",
+    "sections": {
+      "basic": "Basic Info",
+      "goalActivity": "Goal & Activity"
+    },
     "fields": {
       "sex": {
         "label": "Sex",
@@ -171,7 +176,7 @@
         "error": "Enter protein between 1.2 and 3.0 g/kg."
       },
       "fatMinGPerKg": {
-        "label": "Fat min (g/kg)",
+        "label": "Min. Fat (g/kg)",
         "placeholder": "e.g. 0.8",
         "hint": "Range: 0.3-1.5 g/kg.",
         "error": "Enter fat minimum between 0.3 and 1.5 g/kg."
