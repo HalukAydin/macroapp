@@ -1,4 +1,4 @@
-import type { ActivityLevel, BasicProfileForEnergy } from "./types";
+import type { ActivityLevel, BasicProfileForEnergy } from "./types.js";
 
 export function mifflinStJeorBmr(params: Pick<BasicProfileForEnergy, "sex" | "age" | "heightCm" | "weightKg">): number {
   const { sex, age, heightCm, weightKg } = params;

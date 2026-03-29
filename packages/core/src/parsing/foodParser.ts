@@ -1,4 +1,4 @@
-import { FOOD_CATALOG, type FoodCatalogItem, type FoodMacroBreakdown } from "./foodCatalog";
+import { FOOD_CATALOG, type FoodCatalogItem, type FoodMacroBreakdown } from "./foodCatalog.js";
 
 type ParsedUnit = "g" | "piece" | "ml" | "scoop";
 
