@@ -11,7 +11,9 @@ function HomeRedirect() {
   const isHydrated = useProfileStore((s) => s.isHydrated);
   const profile = useProfileStore((s) => s.profile);
   if (!isHydrated) return null;
-  return <Navigate to={profile ? "/dashboard" : "/profile"} replace />;
+  const hasValidProfile = profile !== null && profile.age !== undefined;
+  console.log("HomeRedirect profile:", profile, "→", hasValidProfile ? "/dashboard" : "/profile");
+  return <Navigate to={hasValidProfile ? "/dashboard" : "/profile"} replace />;
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {

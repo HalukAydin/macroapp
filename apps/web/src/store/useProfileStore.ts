@@ -413,6 +413,7 @@ export const useProfileStore = create<State>((set, get) => ({
 
     if (profileRes.status === "fulfilled") {
       const p = profileRes.value;
+      console.log("hydrated profile:", p);
       const existing = get().profile;
       const merged: StoredProfile = {
         sex: p.gender,
@@ -426,6 +427,9 @@ export const useProfileStore = create<State>((set, get) => ({
       };
       set({ profile: merged });
       get().recalc();
+    } else {
+      console.log("hydrated profile: none (status:", profileRes.status, profileRes.reason ?? "");
+      set({ profile: null });
     }
 
     if (weightRes.status === "fulfilled") {
@@ -454,6 +458,7 @@ export const useProfileStore = create<State>((set, get) => ({
     }
 
     const s = get();
+    console.log("store profile after hydrate:", s.profile);
     persist(s.profile, s.weightEntries, s.dailyLog);
     set({ isHydrated: true });
   },

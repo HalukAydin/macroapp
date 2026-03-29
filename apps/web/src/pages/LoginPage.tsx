@@ -24,7 +24,7 @@ export default function LoginPage() {
       } else {
         await register(email, password);
       }
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
