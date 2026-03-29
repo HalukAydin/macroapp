@@ -1,6 +1,6 @@
 import { FOOD_CATALOG, type FoodCatalogItem, type FoodMacroBreakdown } from "./foodCatalog";
 
-type ParsedUnit = "g" | "piece";
+type ParsedUnit = "g" | "piece" | "ml" | "scoop";
 
 export interface ParsedFoodItem {
   rawSegment: string;
@@ -25,14 +25,41 @@ export interface ParsedFoodResult {
 
 const GRAM_UNITS = new Set(["g", "gr", "gram", "grams"]);
 const PIECE_UNITS = new Set(["piece", "pieces", "pc", "pcs", "adet"]);
+const ML_UNITS = new Set(["ml", "mililitre", "mililiter", "milliliter", "millilitre"]);
+const SCOOP_UNITS = new Set(["scoop", "scoops", "olcek"]);
+
+const EXPLICIT_ALIAS_TO_ID: Record<string, FoodCatalogItem["id"]> = {
+  whey: "whey_protein",
+  "whey protein": "whey_protein",
+  "protein powder": "whey_protein",
+  "protein tozu": "whey_protein",
+  "kıyma": "ground_beef",
+  "dana kıyma": "ground_beef",
+  pilav: "cooked_rice",
+  "pirinç pilavı": "cooked_rice",
+  muz: "banana",
+  "yoğurt": "yogurt",
+  karpuz: "watermelon",
+  süt: "milk"
+};
 
 const ALIAS_TO_FOOD = buildAliasMap();
 
 function buildAliasMap(): Map<string, FoodCatalogItem> {
   const map = new Map<string, FoodCatalogItem>();
+  const foodById = new Map<FoodCatalogItem["id"], FoodCatalogItem>(
+    FOOD_CATALOG.map((item) => [item.id, item])
+  );
 
   for (const item of FOOD_CATALOG) {
     for (const alias of item.aliases) {
+      map.set(normalize(alias), item);
+    }
+  }
+
+  for (const [alias, foodId] of Object.entries(EXPLICIT_ALIAS_TO_ID)) {
+    const item = foodById.get(foodId);
+    if (item) {
       map.set(normalize(alias), item);
     }
   }
@@ -106,7 +133,11 @@ function parseSegment(
 
   const firstSpaceIndex = remainder.indexOf(" ");
   const firstToken = normalize(firstSpaceIndex === -1 ? remainder : remainder.slice(0, firstSpaceIndex));
-  const isUnitToken = GRAM_UNITS.has(firstToken) || PIECE_UNITS.has(firstToken);
+  const isUnitToken =
+    GRAM_UNITS.has(firstToken) ||
+    PIECE_UNITS.has(firstToken) ||
+    ML_UNITS.has(firstToken) ||
+    SCOOP_UNITS.has(firstToken);
   const restAfterUnit =
     isUnitToken && firstSpaceIndex !== -1 ? remainder.slice(firstSpaceIndex + 1) : "";
 
@@ -122,6 +153,8 @@ function resolveUnit(item: FoodCatalogItem, unitRaw: string): ParsedUnit | null 
   if (!unitRaw) return item.pieceToGram ? "piece" : "g";
   if (GRAM_UNITS.has(unitRaw)) return "g";
   if (PIECE_UNITS.has(unitRaw)) return "piece";
+  if (ML_UNITS.has(unitRaw)) return "ml";
+  if (SCOOP_UNITS.has(unitRaw)) return "scoop";
   return null;
 }
 
@@ -157,7 +190,7 @@ export function parseFoodInput(input: string): ParsedFoodResult {
     if (!unit) {
       issues.push({
         segment: rawSegment,
-        reason: `Unsupported unit: "${parsed.unitRaw}". Use g or piece/adet.`
+        reason: `Unsupported unit: "${parsed.unitRaw}". Use g/gr, ml, piece/adet, or scoop/olcek.`
       });
       continue;
     }
@@ -170,7 +203,32 @@ export function parseFoodInput(input: string): ParsedFoodResult {
       continue;
     }
 
-    const grams = unit === "g" ? parsed.quantity : parsed.quantity * (food.pieceToGram as number);
+    if (unit === "ml" && !food.mlToGram) {
+      issues.push({
+        segment: rawSegment,
+        reason: `${food.displayName} does not support ml-based input.`
+      });
+      continue;
+    }
+
+    if (unit === "scoop" && !food.scoopToGram) {
+      issues.push({
+        segment: rawSegment,
+        reason: `${food.displayName} does not support scoop-based input.`
+      });
+      continue;
+    }
+
+    let grams = parsed.quantity;
+
+    if (unit === "piece") {
+      grams = parsed.quantity * (food.pieceToGram as number);
+    } else if (unit === "ml") {
+      grams = parsed.quantity * (food.mlToGram as number);
+    } else if (unit === "scoop") {
+      grams = parsed.quantity * (food.scoopToGram as number);
+    }
+
     const macros = scaleMacros(food.per100g, grams);
 
     items.push({
