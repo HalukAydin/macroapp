@@ -405,6 +405,8 @@ export const useProfileStore = create<State>((set, get) => ({
       return;
     }
     const today = todayIsoDate();
+    // Clear local food entries before fetching from API to prevent duplicates
+    set({ dailyLog: createEmptyDailyLog(today) });
     const [profileRes, weightRes, foodRes] = await Promise.allSettled([
       api.getProfile(),
       api.getWeightEntries(),
@@ -461,6 +463,14 @@ export const useProfileStore = create<State>((set, get) => ({
   },
 
   clearTodayLog: () => {
+    const baseLog = get().dailyLog;
+    if (useAuthStore.getState().isAuthenticated) {
+      for (const entry of baseLog.entries) {
+        if (entry.apiId != null) {
+          api.deleteFoodEntry(entry.apiId).catch(() => {});
+        }
+      }
+    }
     const nextLog = createEmptyDailyLog();
     set({ dailyLog: nextLog });
     persist(get().profile, get().weightEntries, nextLog);
