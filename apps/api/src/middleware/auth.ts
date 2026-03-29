@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export type AuthedRequest = Request & { userId: number };
 
@@ -20,7 +20,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
   }
 
   try {
-    const payload = verify(token, secret) as JwtPayload;
+    const payload = jwt.verify(token, secret) as JwtPayload;
     (req as AuthedRequest).userId = payload.userId;
     next();
   } catch {

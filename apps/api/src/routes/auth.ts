@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { z } from "zod";
-import { hash, compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { users } from "../db/schema.js";
@@ -16,7 +16,7 @@ const authSchema = z.object({
 function createToken(userId: number): string {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error("JWT_SECRET is not set");
-  return sign({ userId }, secret, { expiresIn: "7d" });
+  return jwt.sign({ userId }, secret, { expiresIn: "7d" });
 }
 
 // POST /auth/register
@@ -40,7 +40,7 @@ router.post("/register", async (req, res) => {
       return;
     }
 
-    const passwordHash = await hash(password, 12);
+    const passwordHash = await bcrypt.hash(password, 12);
     const [user] = await db
       .insert(users)
       .values({ email, passwordHash })
@@ -73,7 +73,7 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const valid = await compare(password, user.passwordHash);
+    const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
       res.status(401).json({ error: "Invalid credentials" });
       return;

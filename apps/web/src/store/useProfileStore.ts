@@ -10,6 +10,8 @@ import type { ActivityLevel, Sex, WeightEntry, WeightTrendPoint } from "@macro/c
 import type { FoodMacroBreakdown, ParsedFoodResult } from "@macro/core";
 import { loadState, saveState } from "../lib/storage";
 import type { ProfileFormValues } from "../app/profileSchema";
+import * as api from "../lib/api";
+import { TOKEN_KEY } from "../lib/api";
 
 type Goal = "cut" | "maintain" | "bulk";
 

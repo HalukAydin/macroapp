@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { registerMiddleware } from "./middleware/index.js";
 import { registerRoutes } from "./routes/index.js";
@@ -7,7 +8,7 @@ import { registerRoutes } from "./routes/index.js";
 import "@macro/core";
 
 const app = express();
-const PORT = process.env.PORT ?? 3001;
+const PORT = process.env.PORT ?? 3002;
 
 registerMiddleware(app);
 registerRoutes(app);
