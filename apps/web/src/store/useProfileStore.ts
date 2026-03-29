@@ -82,7 +82,7 @@ type State = {
   lastFoodEstimateInput: string;
   setProfile: (p: StoredProfile) => void;
   addWeightEntry: (entry: WeightEntry) => void;
-  estimateFood: (input: string) => ParsedFoodResult;
+  estimateFood: (input: string, locale?: "tr" | "en") => ParsedFoodResult;
   addFoodEntry: (entry: NewFoodEntryInput) => void;
   removeFoodEntry: (id: string) => void;
   clearTodayLog: () => void;
@@ -324,8 +324,8 @@ export const useProfileStore = create<State>((set, get) => ({
     }
   },
 
-  estimateFood: (input) => {
-    const result = parseFoodInput(input);
+  estimateFood: (input, locale = "en") => {
+    const result = parseFoodInput(input, locale);
     set({
       lastFoodEstimate: result,
       lastFoodEstimateInput: input.trim()

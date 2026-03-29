@@ -170,7 +170,7 @@ function resolveUnit(item: FoodCatalogItem, unitRaw: string): ParsedUnit | null 
   return null;
 }
 
-export function parseFoodInput(input: string): ParsedFoodResult {
+export function parseFoodInput(input: string, locale: "tr" | "en" = "en"): ParsedFoodResult {
   const segments = input
     .split(",")
     .map((segment) => segment.trim())
@@ -246,7 +246,7 @@ export function parseFoodInput(input: string): ParsedFoodResult {
     items.push({
       rawSegment,
       foodId: food.id,
-      foodName: food.displayName,
+      foodName: locale === "tr" ? food.displayNameTr : food.displayNameEn,
       quantity: parsed.quantity,
       unit,
       grams: round1(grams),

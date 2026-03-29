@@ -31,7 +31,7 @@ function toPercent(consumed: number, target: number | null): number {
 }
 
 export default function Dashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const profile = useProfileStore((s) => s.profile);
   const tdee = useProfileStore((s) => s.tdee);
   const targetCalories = useProfileStore((s) => s.targetCalories);
@@ -144,7 +144,8 @@ export default function Dashboard() {
       return;
     }
 
-    const result = estimateFood(input);
+    const locale = i18n.resolvedLanguage?.startsWith("tr") ? "tr" : "en";
+    const result = estimateFood(input, locale);
 
     if (result.items.length > 0 && result.issues.length === 0) {
       setQuickAddFeedback({
