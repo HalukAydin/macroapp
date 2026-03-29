@@ -12,7 +12,6 @@ function HomeRedirect() {
   const profile = useProfileStore((s) => s.profile);
   if (!isHydrated) return null;
   const hasValidProfile = profile !== null && profile.age !== undefined;
-  console.log("HomeRedirect profile:", profile, "→", hasValidProfile ? "/dashboard" : "/profile");
   return <Navigate to={hasValidProfile ? "/dashboard" : "/profile"} replace />;
 }
 
