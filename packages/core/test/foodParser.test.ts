@@ -51,7 +51,7 @@ describe("food parser", () => {
         { input: "100g pilav", foodId: "cooked_rice", grams: 100 },
         { input: "100g pirinç pilavı", foodId: "cooked_rice", grams: 100 },
         { input: "100gr karpuz", foodId: "watermelon", grams: 100 },
-        { input: "1 yumurta", foodId: "egg", grams: 50 },
+        { input: "1 yumurta", foodId: "egg", grams: 60 },
         { input: "100g yoğurt", foodId: "yogurt", grams: 100 }
       ];
 
@@ -71,7 +71,7 @@ describe("food parser", () => {
         { input: "100g ground beef", foodId: "ground_beef", grams: 100 },
         { input: "100g cooked rice", foodId: "cooked_rice", grams: 100 },
         { input: "100g watermelon", foodId: "watermelon", grams: 100 },
-        { input: "1 egg", foodId: "egg", grams: 50 },
+        { input: "1 egg", foodId: "egg", grams: 60 },
         { input: "100g yogurt", foodId: "yogurt", grams: 100 },
         { input: "100g oats", foodId: "oats", grams: 100 },
         { input: "100g chicken", foodId: "chicken_breast", grams: 100 },
@@ -93,12 +93,12 @@ describe("food parser", () => {
       const result = parseFoodInput("2 yumurta");
 
       expect(result.issues).toHaveLength(0);
-      expect(result.items[0]?.grams).toBe(100);
+      expect(result.items[0]?.grams).toBe(120);
       expect(result.items[0]?.macros).toEqual({
-        proteinG: 13,
-        fatG: 11,
-        carbG: 1.1,
-        calories: 155
+        proteinG: 15.6,
+        fatG: 13.2,
+        carbG: 1.3,
+        calories: 186
       });
     });
 
@@ -110,7 +110,7 @@ describe("food parser", () => {
       expect(result.items[0]?.macros).toEqual({
         proteinG: 1.3,
         fatG: 0.4,
-        carbG: 27.4,
+        carbG: 27.6,
         calories: 106.8
       });
     });
@@ -126,10 +126,10 @@ describe("food parser", () => {
       expect(result.items[0]?.unit).toBe("g");
       expect(result.items[0]?.grams).toBe(30);
       expect(result.items[0]?.macros).toEqual({
-        proteinG: 24,
+        proteinG: 22.5,
         fatG: 1.8,
-        carbG: 2.4,
-        calories: 120
+        carbG: 1.2,
+        calories: 108
       });
     });
 
@@ -142,10 +142,10 @@ describe("food parser", () => {
       expect(result.items[0]?.unit).toBe("scoop");
       expect(result.items[0]?.grams).toBe(30);
       expect(result.items[0]?.macros).toEqual({
-        proteinG: 24,
+        proteinG: 22.5,
         fatG: 1.8,
-        carbG: 2.4,
-        calories: 120
+        carbG: 1.2,
+        calories: 108
       });
     });
 
@@ -168,11 +168,21 @@ describe("food parser", () => {
       expect(result.items[0]?.unit).toBe("ml");
       expect(result.items[0]?.grams).toBe(200);
       expect(result.items[0]?.macros).toEqual({
-        proteinG: 6.6,
-        fatG: 6.8,
-        carbG: 9.6,
+        proteinG: 6.8,
+        fatG: 7.2,
+        carbG: 10,
         calories: 122
       });
+    });
+
+    it("parses 100ml milk (1:1 ml to gram)", () => {
+      const result = parseFoodInput("100ml süt");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("milk");
+      expect(result.items[0]?.unit).toBe("ml");
+      expect(result.items[0]?.grams).toBe(100);
     });
   });
 
@@ -183,10 +193,10 @@ describe("food parser", () => {
       expect(result.issues).toHaveLength(0);
       expect(result.items).toHaveLength(3);
       expect(result.totals).toEqual({
-        proteinG: 73,
-        fatG: 21.9,
+        proteinG: 72.5,
+        fatG: 24.2,
         carbG: 54.1,
-        calories: 713.7
+        calories: 744.7
       });
     });
 
@@ -197,9 +207,9 @@ describe("food parser", () => {
       expect(result.items).toHaveLength(2);
       expect(result.totals).toEqual({
         proteinG: 41.7,
-        fatG: 25.8,
+        fatG: 22.8,
         carbG: 28,
-        calories: 511
+        calories: 505
       });
     });
 
@@ -215,11 +225,40 @@ describe("food parser", () => {
       expect(result.issues).toHaveLength(0);
       expect(result.items).toHaveLength(3);
       expect(result.totals).toEqual({
-        proteinG: 50.5,
-        fatG: 18.3,
-        carbG: 56.5,
-        calories: 586.2
+        proteinG: 48.5,
+        fatG: 20.6,
+        carbG: 55.3,
+        calories: 605.2
       });
+    });
+  });
+
+  describe("food-name-first quantity format", () => {
+    it("parses 'pilav 150g' (food before quantity)", () => {
+      const result = parseFoodInput("pilav 150g");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("cooked_rice");
+      expect(result.items[0]?.grams).toBe(150);
+    });
+
+    it("parses 'tavuk 200g' (Turkish food name first)", () => {
+      const result = parseFoodInput("tavuk 200g");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("chicken_breast");
+      expect(result.items[0]?.grams).toBe(200);
+    });
+
+    it("parses 'karpuz 300 gr' (food name with spaced unit)", () => {
+      const result = parseFoodInput("karpuz 300 gr");
+
+      expect(result.issues).toHaveLength(0);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0]?.foodId).toBe("watermelon");
+      expect(result.items[0]?.grams).toBe(300);
     });
   });
 

@@ -116,6 +116,18 @@ function parseSegment(
 
   const match = trimmed.match(/^(\d+(?:[.,]\d+)?)(.*)$/);
   if (!match) {
+    // Try "food_name qty[unit]" format, e.g. "pilav 150g" or "tavuk 200 gr"
+    const foodFirstMatch = trimmed.match(/^(.+?)\s+(\d+(?:[.,]\d+)?)\s*([a-zA-Z]+)?\s*$/);
+    if (foodFirstMatch) {
+      const foodStr = foodFirstMatch[1] ?? "";
+      const qty = Number((foodFirstMatch[2] ?? "100").replace(",", "."));
+      const unitStr = normalize(foodFirstMatch[3] ?? "");
+      const foodRaw = normalize(foodStr);
+      if (foodRaw && Number.isFinite(qty) && qty > 0) {
+        return { quantity: qty, unitRaw: unitStr, foodRaw, assumedQuantity: false };
+      }
+    }
+
     const foodRaw = normalize(trimmed);
     if (!foodRaw) return null;
     return {
