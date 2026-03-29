@@ -221,7 +221,7 @@ export default function Dashboard() {
 
     addFoodEntry({
       foodName,
-      sourceText: lastFoodEstimateInput,
+      sourceText: lastFoodEstimate.items.length === 1 ? foodName : lastFoodEstimateInput,
       quantityText: lastFoodEstimateInput,
       calories: lastFoodEstimate.totals.calories,
       protein: lastFoodEstimate.totals.proteinG,
