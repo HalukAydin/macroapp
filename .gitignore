@@ -1,6 +1,5 @@
 node_modules
 dist
 .turbo
-pnpm-lock.yaml
 .env
 .env.local
