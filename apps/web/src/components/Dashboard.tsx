@@ -122,13 +122,12 @@ export default function Dashboard() {
     return (
       <div className="page-stack">
         <SectionTitle title={t("dashboard.title")} subtitle={t("dashboard.empty.subtitle")} />
-        <Card title={t("dashboard.empty.noProfileTitle")}>
+        <Card>
           <div className="card-stack">
-            <p className="muted-text">{t("dashboard.empty.line1")}</p>
-            <p className="muted-text">{t("dashboard.empty.line2")}</p>
-            <div>
-              <Link to="/profile">{t("dashboard.empty.goToProfile")}</Link>
-            </div>
+            <p>Makrolarını hesaplamak için önce profilini tamamla.</p>
+            <Link to="/profile">
+              <button type="button">Profili Tamamla</button>
+            </Link>
           </div>
         </Card>
       </div>

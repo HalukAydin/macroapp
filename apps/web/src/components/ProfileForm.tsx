@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
@@ -22,6 +23,7 @@ function FieldErrorMessage({ message }: FieldErrorMessageProps) {
 
 export default function ProfileForm() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const current = useProfileStore((s) => s.profile);
   const setProfile = useProfileStore((s) => s.setProfile);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
@@ -43,6 +45,7 @@ export default function ProfileForm() {
 
   // ⚠️ SADECE data alır, event alamaz
   const onValid = (data: ProfileFormValues) => {
+    const isFirstSave = current === null;
     // ekstra garanti: plain object kopyası
     const clean: ProfileFormValues = {
       sex: data.sex,
@@ -56,7 +59,11 @@ export default function ProfileForm() {
     };
 
     setProfile(clean);
-    setSaveMessage(t("profile.saveSuccess"));
+    if (isFirstSave) {
+      navigate("/dashboard");
+    } else {
+      setSaveMessage(t("profile.saveSuccess"));
+    }
   };
 
   return (

@@ -7,6 +7,11 @@ import DashboardPage from "../pages/DashboardPage";
 import WeightLogPage from "../pages/WeightLogPage";
 import LoginPage from "../pages/LoginPage";
 
+function HomeRedirect() {
+  const profile = useProfileStore((s) => s.profile);
+  return <Navigate to={profile ? "/dashboard" : "/profile"} replace />;
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
@@ -30,7 +35,7 @@ export default function AppRoutes() {
         path="/"
         element={
           <ProtectedRoute>
-            <Navigate to="/dashboard" replace />
+            <HomeRedirect />
           </ProtectedRoute>
         }
       />
@@ -62,7 +67,7 @@ export default function AppRoutes() {
         path="*"
         element={
           <ProtectedRoute>
-            <Navigate to="/dashboard" replace />
+            <HomeRedirect />
           </ProtectedRoute>
         }
       />
