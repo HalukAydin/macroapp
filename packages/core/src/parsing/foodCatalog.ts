@@ -49,7 +49,7 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       carbG: 1.1,
       calories: 155
     },
-    pieceToGram: 50
+    pieceToGram: 60
   },
   {
     id: "whey_protein",
@@ -63,10 +63,10 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       "whey isolate"
     ],
     per100g: {
-      proteinG: 80,
+      proteinG: 75,
       fatG: 6,
-      carbG: 8,
-      calories: 400
+      carbG: 4,
+      calories: 360
     },
     scoopToGram: 30
   },
@@ -83,9 +83,9 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
       "lifalif"
     ],
     per100g: {
-      proteinG: 16.9,
-      fatG: 6.9,
-      carbG: 66.3,
+      proteinG: 13,
+      fatG: 7,
+      carbG: 66,
       calories: 389
     }
   },
@@ -136,10 +136,10 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     displayName: "Yogurt",
     aliases: ["yogurt", "yoghurt", "yoğurt"],
     per100g: {
-      proteinG: 3.5,
-      fatG: 3.3,
-      carbG: 4.7,
-      calories: 61
+      proteinG: 4,
+      fatG: 1.5,
+      carbG: 6,
+      calories: 59
     },
     mlToGram: 1
   },
@@ -149,9 +149,9 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     aliases: ["greek yogurt", "greek yoghurt", "suzme yogurt", "süzme yoğurt"],
     per100g: {
       proteinG: 10,
-      fatG: 5,
-      carbG: 3.6,
-      calories: 97
+      fatG: 0.4,
+      carbG: 4,
+      calories: 59
     },
     mlToGram: 1
   },
@@ -162,7 +162,7 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     per100g: {
       proteinG: 1.1,
       fatG: 0.3,
-      carbG: 22.8,
+      carbG: 23,
       calories: 89
     },
     pieceToGram: 120
@@ -183,10 +183,10 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     displayName: "Cheese",
     aliases: ["cheese", "peynir", "kasar", "kasar peyniri"],
     per100g: {
-      proteinG: 17,
-      fatG: 20,
-      carbG: 2,
-      calories: 264
+      proteinG: 25,
+      fatG: 33,
+      carbG: 1.3,
+      calories: 402
     }
   },
   {
@@ -194,9 +194,9 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     displayName: "Milk",
     aliases: ["milk", "sut", "süt"],
     per100g: {
-      proteinG: 3.3,
-      fatG: 3.4,
-      carbG: 4.8,
+      proteinG: 3.4,
+      fatG: 3.6,
+      carbG: 5,
       calories: 61
     },
     mlToGram: 1
@@ -218,9 +218,9 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     aliases: ["ground beef", "minced beef", "kiyma", "kıyma", "dana kiyma", "dana kıyma"],
     per100g: {
       proteinG: 26,
-      fatG: 17,
+      fatG: 15,
       carbG: 0,
-      calories: 254
+      calories: 250
     }
   },
   {
@@ -228,10 +228,10 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     displayName: "Tuna",
     aliases: ["tuna", "tuna fish", "ton baligi", "ton balığı"],
     per100g: {
-      proteinG: 24,
+      proteinG: 30,
       fatG: 1,
       carbG: 0,
-      calories: 116
+      calories: 132
     }
   },
   {
@@ -241,7 +241,7 @@ export const FOOD_CATALOG: FoodCatalogItem[] = [
     per100g: {
       proteinG: 0.6,
       fatG: 0.2,
-      carbG: 7.6,
+      carbG: 8,
       calories: 30
     }
   },
