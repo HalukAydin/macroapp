@@ -213,11 +213,22 @@ export default function Dashboard() {
       return;
     }
 
-    const firstFoodName = lastFoodEstimate.items[0]?.foodName;
-    const foodName =
-      lastFoodEstimate.items.length === 1 && firstFoodName
-        ? firstFoodName
-        : t("dashboard.quickAdd.estimatedMealName", { count: lastFoodEstimate.items.length });
+    let foodName: string;
+    if (lastFoodEstimate.items.length === 1) {
+      const item = lastFoodEstimate.items[0]!;
+      const localizedName = item.foodName;
+      if (item.unit === "piece") {
+        foodName = `${item.quantity} ${localizedName}`;
+      } else if (item.unit === "ml") {
+        foodName = `${item.quantity}ml ${localizedName}`;
+      } else if (item.unit === "scoop") {
+        foodName = `${item.quantity} scoop ${localizedName}`;
+      } else {
+        foodName = `${item.grams}g ${localizedName}`;
+      }
+    } else {
+      foodName = t("dashboard.quickAdd.estimatedMealName", { count: lastFoodEstimate.items.length });
+    }
 
     addFoodEntry({
       foodName,
