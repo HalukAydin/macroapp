@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { AppLanguage } from "../i18n";
 import { useProfileStore } from "../store/useProfileStore";
+import { useAuthStore } from "../store/useAuthStore";
 import PageContainer from "./ui/PageContainer";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const reset = useProfileStore((s) => s.reset);
   const hasProfile = useProfileStore((s) => Boolean(s.profile));
   const weightEntryCount = useProfileStore((s) => s.weightEntries.length);
   const foodLogCount = useProfileStore((s) => s.dailyLog.entries.length);
+  const logout = useAuthStore((s) => s.logout);
   const [resetFeedback, setResetFeedback] = useState<string | null>(null);
   const currentLanguage: AppLanguage = i18n.resolvedLanguage?.startsWith("tr") ? "tr" : "en";
 
@@ -26,6 +29,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     setResetFeedback(
       hadData ? t("app.resetFeedback.resetDone") : t("app.resetFeedback.nothing")
     );
+  };
+
+  const onLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   const onLanguageChange = (value: AppLanguage) => {
@@ -64,8 +72,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </select>
           </label>
 
-          <button onClick={onReset} className="app-reset-btn">
-            {t("app.reset")}
+          <button onClick={onLogout} className="app-reset-btn">
+            {t("app.logout")}
           </button>
         </header>
         {resetFeedback ? (

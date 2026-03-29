@@ -12,6 +12,7 @@ import { loadState, saveState } from "../lib/storage";
 import type { ProfileFormValues } from "../app/profileSchema";
 import * as api from "../lib/api";
 import { TOKEN_KEY } from "../lib/api";
+import { useAuthStore } from "./useAuthStore";
 
 type Goal = "cut" | "maintain" | "bulk";
 
@@ -28,6 +29,7 @@ type StoredProfile = {
 
 export type DailyFoodEntry = {
   id: string;
+  apiId?: number;
   foodName: string;
   quantityText?: string;
   sourceText: string;
@@ -86,6 +88,7 @@ type State = {
   clearTodayLog: () => void;
   getTodayLog: () => DailyLog;
   reset: () => void;
+  hydrateFromApi: () => Promise<void>;
 
   // derived
   tdee: number | null;
@@ -163,8 +166,10 @@ function sanitizeDailyEntry(value: unknown, fallbackDate: string): DailyFoodEntr
   const quantityText = String(asRecord.quantityText ?? "").trim();
   const createdAt = String(asRecord.createdAt ?? `${fallbackDate}T00:00:00.000Z`);
 
+  const apiId = typeof asRecord.apiId === "number" ? asRecord.apiId : undefined;
   return {
     id: String(asRecord.id ?? createEntryId()),
+    ...(apiId !== undefined ? { apiId } : {}),
     foodName,
     sourceText,
     quantityText: quantityText || undefined,
@@ -246,6 +251,7 @@ function persist(profile: StoredProfile | null, weightEntries: WeightEntry[], da
   }));
   const cleanDailyEntries = dailyLog.entries.map((entry) => ({
     id: entry.id,
+    ...(entry.apiId !== undefined ? { apiId: entry.apiId } : {}),
     foodName: entry.foodName,
     quantityText: entry.quantityText,
     sourceText: entry.sourceText,
@@ -289,6 +295,16 @@ export const useProfileStore = create<State>((set, get) => ({
     set({ profile: clean });
     persist(clean, get().weightEntries, get().dailyLog);
     get().recalc();
+    if (useAuthStore.getState().isAuthenticated) {
+      api.saveProfile({
+        age: clean.age,
+        gender: clean.sex,
+        heightCm: clean.heightCm,
+        weightKg: clean.weightKg,
+        activityLevel: clean.activity,
+        goal: clean.goal
+      }).catch(() => {});
+    }
   },
 
   addWeightEntry: (entry) => {
@@ -302,6 +318,9 @@ export const useProfileStore = create<State>((set, get) => ({
       weightTrend: emaTrend(updatedEntries)
     });
     persist(get().profile, updatedEntries, get().dailyLog);
+    if (useAuthStore.getState().isAuthenticated) {
+      api.addWeightEntry({ weightKg: cleanEntry.weightKg, date: cleanEntry.date }).catch(() => {});
+    }
   },
 
   estimateFood: (input) => {
@@ -339,11 +358,31 @@ export const useProfileStore = create<State>((set, get) => ({
 
     set({ dailyLog: nextLog });
     persist(get().profile, get().weightEntries, nextLog);
+    if (useAuthStore.getState().isAuthenticated) {
+      api.addFoodEntry({
+        foodName: nextEntry.foodName,
+        calories: nextEntry.calories,
+        protein: nextEntry.protein,
+        carbs: nextEntry.carbs,
+        fat: nextEntry.fat,
+        grams: 0,
+        date: baseLog.date
+      }).then((res) => {
+        const log = get().dailyLog;
+        const updatedEntries = log.entries.map((e) =>
+          e.id === nextEntry.id ? { ...e, apiId: res.id } : e
+        );
+        const updatedLog = { ...log, entries: updatedEntries };
+        set({ dailyLog: updatedLog });
+        persist(get().profile, get().weightEntries, updatedLog);
+      }).catch(() => {});
+    }
   },
 
   removeFoodEntry: (id) => {
     if (!id) return;
     const baseLog = ensureTodayDailyLog(get().dailyLog);
+    const entryToRemove = baseLog.entries.find((e) => e.id === id);
     const nextEntries = baseLog.entries.filter((entry) => entry.id !== id);
     if (nextEntries.length === baseLog.entries.length) return;
 
@@ -354,6 +393,64 @@ export const useProfileStore = create<State>((set, get) => ({
     };
     set({ dailyLog: nextLog });
     persist(get().profile, get().weightEntries, nextLog);
+    if (entryToRemove?.apiId != null && useAuthStore.getState().isAuthenticated) {
+      api.deleteFoodEntry(entryToRemove.apiId).catch(() => {});
+    }
+  },
+
+  hydrateFromApi: async () => {
+    if (!useAuthStore.getState().isAuthenticated) return;
+    const today = todayIsoDate();
+    const [profileRes, weightRes, foodRes] = await Promise.allSettled([
+      api.getProfile(),
+      api.getWeightEntries(),
+      api.getFoodEntries(today)
+    ]);
+
+    if (profileRes.status === "fulfilled") {
+      const p = profileRes.value;
+      const existing = get().profile;
+      const merged: StoredProfile = {
+        sex: p.gender,
+        age: p.age,
+        heightCm: p.heightCm,
+        weightKg: p.weightKg,
+        activity: p.activityLevel,
+        goal: p.goal,
+        proteinGPerKg: existing?.proteinGPerKg ?? 2,
+        fatMinGPerKg: existing?.fatMinGPerKg ?? 0.8
+      };
+      set({ profile: merged });
+      get().recalc();
+    }
+
+    if (weightRes.status === "fulfilled") {
+      const entries: WeightEntry[] = weightRes.value.map((e) => ({
+        date: e.date,
+        weightKg: e.weightKg
+      }));
+      set({ weightEntries: entries, weightTrend: emaTrend(entries) });
+    }
+
+    if (foodRes.status === "fulfilled") {
+      const apiEntries = foodRes.value;
+      const entries: DailyFoodEntry[] = apiEntries.map((e) => ({
+        id: createEntryId(),
+        apiId: e.id,
+        foodName: e.foodName,
+        sourceText: e.foodName,
+        calories: e.calories,
+        protein: e.protein,
+        carbs: e.carbs,
+        fat: e.fat,
+        createdAt: e.createdAt
+      }));
+      const nextLog: DailyLog = { date: today, entries, ...computeDailyTotals(entries) };
+      set({ dailyLog: nextLog });
+    }
+
+    const s = get();
+    persist(s.profile, s.weightEntries, s.dailyLog);
   },
 
   clearTodayLog: () => {
