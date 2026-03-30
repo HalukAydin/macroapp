@@ -213,9 +213,23 @@ export default function Dashboard() {
       return;
     }
 
+    // Re-estimate with the current UI locale so the food name always matches
+    // the active language, regardless of what locale was active when the user
+    // first clicked "Estimate".
+    const locale = i18n.resolvedLanguage?.startsWith("tr") ? "tr" : "en";
+    const localizedEstimate = estimateFood(lastFoodEstimateInput, locale);
+
+    if (localizedEstimate.items.length === 0) {
+      setQuickAddFeedback({
+        kind: "warn",
+        message: t("dashboard.quickAdd.feedback.noEstimateToAdd")
+      });
+      return;
+    }
+
     let foodName: string;
-    if (lastFoodEstimate.items.length === 1) {
-      const item = lastFoodEstimate.items[0]!;
+    if (localizedEstimate.items.length === 1) {
+      const item = localizedEstimate.items[0]!;
       const localizedName = item.foodName;
       if (item.unit === "piece") {
         foodName = `${item.quantity} ${localizedName}`;
@@ -227,17 +241,17 @@ export default function Dashboard() {
         foodName = `${item.grams}g ${localizedName}`;
       }
     } else {
-      foodName = t("dashboard.quickAdd.estimatedMealName", { count: lastFoodEstimate.items.length });
+      foodName = t("dashboard.quickAdd.estimatedMealName", { count: localizedEstimate.items.length });
     }
 
     addFoodEntry({
       foodName,
-      sourceText: lastFoodEstimate.items.length === 1 ? foodName : lastFoodEstimateInput,
+      sourceText: localizedEstimate.items.length === 1 ? foodName : lastFoodEstimateInput,
       quantityText: lastFoodEstimateInput,
-      calories: lastFoodEstimate.totals.calories,
-      protein: lastFoodEstimate.totals.proteinG,
-      carbs: lastFoodEstimate.totals.carbG,
-      fat: lastFoodEstimate.totals.fatG
+      calories: localizedEstimate.totals.calories,
+      protein: localizedEstimate.totals.proteinG,
+      carbs: localizedEstimate.totals.carbG,
+      fat: localizedEstimate.totals.fatG
     });
 
     setQuickAddFeedback({
