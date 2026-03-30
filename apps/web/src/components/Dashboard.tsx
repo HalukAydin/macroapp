@@ -54,6 +54,8 @@ export default function Dashboard() {
   const [selectedGrams, setSelectedGrams] = useState("100");
   const [hadPartialLocalMatch, setHadPartialLocalMatch] = useState(false);
 
+  const locale = i18n.language?.startsWith("tr") ? "tr" : "en";
+
   const latestPoint = weightTrend.at(-1) ?? null;
   const firstPoint = weightTrend[0] ?? null;
   const trendDelta =
@@ -144,7 +146,6 @@ export default function Dashboard() {
       return;
     }
 
-    const locale = i18n.resolvedLanguage?.startsWith("tr") ? "tr" : "en";
     const result = estimateFood(input, locale);
 
     if (result.items.length > 0 && result.issues.length === 0) {
@@ -216,7 +217,6 @@ export default function Dashboard() {
     // Re-estimate with the current UI locale so the food name always matches
     // the active language, regardless of what locale was active when the user
     // first clicked "Estimate".
-    const locale = i18n.resolvedLanguage?.startsWith("tr") ? "tr" : "en";
     const localizedEstimate = estimateFood(lastFoodEstimateInput, locale);
 
     if (localizedEstimate.items.length === 0) {
