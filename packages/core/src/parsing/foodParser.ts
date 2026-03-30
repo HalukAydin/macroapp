@@ -131,8 +131,8 @@ function parseSegment(
     const foodRaw = normalize(trimmed);
     if (!foodRaw) return null;
     return {
-      quantity: 100,
-      unitRaw: "g",
+      quantity: 1,
+      unitRaw: "",
       foodRaw,
       assumedQuantity: true
     };
@@ -231,14 +231,18 @@ export function parseFoodInput(input: string, locale: "tr" | "en" = "en"): Parse
       continue;
     }
 
-    let grams = parsed.quantity;
+    // For assumed-quantity inputs, default to 100 g for gram-based foods and
+    // 1 piece for piece-based foods (parseSegment returns quantity:1 / unitRaw:"").
+    const quantity = parsed.assumedQuantity && unit === "g" ? 100 : parsed.quantity;
+
+    let grams = quantity;
 
     if (unit === "piece") {
-      grams = parsed.quantity * (food.pieceToGram as number);
+      grams = quantity * (food.pieceToGram as number);
     } else if (unit === "ml") {
-      grams = parsed.quantity * (food.mlToGram as number);
+      grams = quantity * (food.mlToGram as number);
     } else if (unit === "scoop") {
-      grams = parsed.quantity * (food.scoopToGram as number);
+      grams = quantity * (food.scoopToGram as number);
     }
 
     const macros = scaleMacros(food.per100g, grams);
@@ -247,16 +251,17 @@ export function parseFoodInput(input: string, locale: "tr" | "en" = "en"): Parse
       rawSegment,
       foodId: food.id,
       foodName: locale === "tr" ? food.displayNameTr : food.displayNameEn,
-      quantity: parsed.quantity,
+      quantity,
       unit,
       grams: round1(grams),
       macros
     });
 
     if (parsed.assumedQuantity) {
+      const assumed = unit === "piece" ? "1 piece" : "100 g";
       issues.push({
         segment: rawSegment,
-        reason: "Missing quantity. Assumed 100 g."
+        reason: `Missing quantity. Assumed ${assumed}.`
       });
     }
   }
