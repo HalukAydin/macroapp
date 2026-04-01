@@ -13,6 +13,13 @@ A full-stack macro nutrition tracking app inspired by MacroFactor.
 - JWT authentication with per-user data isolation
 - Turkish and English UI support
 
+## Screenshots
+
+![MacroTrack Preview](apps/web/public/screenshots/preview.webp)
+![MacroTrack Preview 2](apps/web/public/screenshots/preview%20(1).webp)
+![MacroTrack Preview 3](apps/web/public/screenshots/preview%20(2).webp)
+![MacroTrack Preview 4](apps/web/public/screenshots/preview%20(3).webp)
+
 ## Architecture
 
 pnpm monorepo with a clean separation between domain logic and platform code.
